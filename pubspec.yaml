@@ -1,0 +1,78 @@
+name: enforcenow
+description: A new Flutter project.
+version: 1.0.0+1
+environment: 
+  sdk: '>=2.12.0 <3.0.0'
+dependencies: 
+  flutter: 
+    sdk: flutter
+  cached_network_image: ^3.2.1
+  flutter_svg: ^1.1.6
+  intl: ^0.18.0
+  fluttertoast:
+  url_launcher:
+  firebase_core:
+  cloud_firestore:
+  firebase_storage:
+  firebase_auth:
+  get_storage:
+  image_picker:
+dev_dependencies: 
+  flutter_test: 
+    sdk: flutter
+flutter: 
+  uses-material-design: true
+  assets: 
+    - assets/
+    - assets/images/
+  fonts: 
+    - family: Inter
+      fonts: 
+        - asset: assets/fonts/InterBold.ttf
+          weight: 700
+        - asset: assets/fonts/InterMedium.ttf
+          weight: 500
+        - asset: assets/fonts/InterRegular.ttf
+          weight: 400
+        - asset: assets/fonts/InterLight.ttf
+          weight: 300
+        - asset: assets/fonts/InterSemiBold.ttf
+          weight: 600
+    - family: Secular One
+      fonts: 
+        - asset: assets/fonts/SecularOneRegular.ttf
+          weight: 400
+    - family: Urbanist
+      fonts: 
+        - asset: assets/fonts/UrbanistRomanBold.ttf
+          weight: 700
+    - family: Asap
+      fonts: 
+        - asset: assets/fonts/AsapRomanRegular.ttf
+          weight: 400
+        - asset: assets/fonts/AsapRomanSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/AsapRomanMedium.ttf
+          weight: 500
+    - family: Bebas Neue
+      fonts: 
+        - asset: assets/fonts/BebasNeueRegular.ttf
+          weight: 400
+    - family: Righteous
+      fonts: 
+        - asset: assets/fonts/RighteousRegular.ttf
+          weight: 400
+    - family: Jost
+      fonts: 
+        - asset: assets/fonts/JostRegular.ttf
+          weight: 400
+    - family: Roboto Mono
+      fonts: 
+        - asset: assets/fonts/RobotoMonoMedium.ttf
+          weight: 500
+        - asset: assets/fonts/RobotoMonoRegular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoMonoBold.ttf
+          weight: 700
+        - asset: assets/fonts/RobotoMonoLight.ttf
+          weight: 300
