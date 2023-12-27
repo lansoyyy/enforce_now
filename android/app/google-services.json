@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "617661924245",
+    "project_id": "enforcenow-65366",
+    "storage_bucket": "enforcenow-65366.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617661924245:android:ce720794d3a117f00cec9c",
+        "android_client_info": {
+          "package_name": "com.enforcenow.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoUJLLKvAqDHGwHcBePRzg1rvonWBtGwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
