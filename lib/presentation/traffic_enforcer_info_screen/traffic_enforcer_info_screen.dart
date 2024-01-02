@@ -47,11 +47,10 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(left: 26.h),
                   child: Row(children: [
-                    CustomImageView(
-                        imagePath: ImageConstant.imgFullLengthPho,
-                        height: 56.adaptSize,
-                        width: 56.adaptSize,
-                        radius: BorderRadius.circular(28.h)),
+                    Icon(
+                      Icons.account_circle_sharp,
+                      size: 48,
+                    ),
                     Padding(
                         padding: EdgeInsets.only(left: 16.h),
                         child: Column(
