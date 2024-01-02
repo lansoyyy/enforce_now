@@ -13,6 +13,7 @@ Future addRecord(lname, fname, mname, license, type) async {
     'status': 'Pending',
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'type': type,
+    'dateTime': DateTime.now(),
   };
 
   await docUser.set(json);

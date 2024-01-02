@@ -1,12 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
-import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class ViolationHisotoryScreen extends StatelessWidget {
-  const ViolationHisotoryScreen({Key? key})
-      : super(
-          key: key,
-        );
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -40,23 +39,7 @@ class ViolationHisotoryScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 27.h),
                 child: Text(
-                  "Juan Sebastian Dela Cruz",
-                  style: theme.textTheme.titleSmall,
-                ),
-              ),
-              SizedBox(height: 9.v),
-              Padding(
-                padding: EdgeInsets.only(left: 23.h),
-                child: Text(
-                  "Date of Birth ",
-                  style: CustomTextStyles.bodyMediumInterGray5000114,
-                ),
-              ),
-              SizedBox(height: 2.v),
-              Padding(
-                padding: EdgeInsets.only(left: 26.h),
-                child: Text(
-                  "01/14/2000",
+                  box.read('name'),
                   style: theme.textTheme.titleSmall,
                 ),
               ),
@@ -64,14 +47,6 @@ class ViolationHisotoryScreen extends StatelessWidget {
               _buildLicenseNumber(context),
               Spacer(),
               SizedBox(height: 53.v),
-              CustomElevatedButton(
-                height: 27.v,
-                width: 106.h,
-                text: "Add record",
-                buttonStyle: CustomButtonStyles.fillBlue,
-                buttonTextStyle: theme.textTheme.labelLarge!,
-                alignment: Alignment.center,
-              ),
             ],
           ),
         ),
@@ -97,98 +72,104 @@ class ViolationHisotoryScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 23.h),
             child: Text(
-              "328798652BFVDFg4y3y",
+              box.read('license'),
               style: theme.textTheme.titleSmall,
             ),
           ),
           SizedBox(height: 1.v),
-          Container(
-            width: 346.h,
-            padding: EdgeInsets.symmetric(vertical: 20.v),
-            decoration: AppDecoration.outlineBlack90002.copyWith(
-              borderRadius: BorderRadiusStyle.roundedBorder10,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      left: 20.h,
-                      right: 5.h,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.h,
-                      vertical: 5.v,
-                    ),
-                    decoration: AppDecoration.fillBlue.copyWith(
-                      borderRadius: BorderRadiusStyle.roundedBorder10,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          "Date of Violations",
-                          style: CustomTextStyles.labelMediumOnErrorContainer,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 28.h),
-                          child: Text(
-                            "E-ticket ↓",
-                            style: CustomTextStyles.labelMediumOnErrorContainer,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 56.h),
-                          child: Text(
-                            "Status",
-                            style: CustomTextStyles.labelMediumOnErrorContainer,
-                          ),
-                        ),
-                      ],
-                    ),
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Records')
+                  .where('license', isEqualTo: box.read('license'))
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.black,
+                    )),
+                  );
+                }
+
+                final data = snapshot.requireData;
+                return Container(
+                  width: 346.h,
+                  padding: EdgeInsets.symmetric(vertical: 20.v),
+                  decoration: AppDecoration.outlineBlack90002.copyWith(
+                    borderRadius: BorderRadiusStyle.roundedBorder10,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-                SizedBox(height: 19.v),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h),
-                  child: _buildStableTableRow(context),
-                ),
-              ],
-            ),
-          ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 20.h,
+                            right: 5.h,
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.h,
+                            vertical: 5.v,
+                          ),
+                          decoration: AppDecoration.fillBlue.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder10,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                "Date of Violations",
+                                style: CustomTextStyles
+                                    .labelMediumOnErrorContainer,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 28.h),
+                                child: Text(
+                                  "E-ticket ↓",
+                                  style: CustomTextStyles
+                                      .labelMediumOnErrorContainer,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 56.h),
+                                child: Text(
+                                  "Status",
+                                  style: CustomTextStyles
+                                      .labelMediumOnErrorContainer,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      for (int i = 0; i < data.docs.length; i++)
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.h),
+                          child: _buildStableTableRow(context, data.docs[i]),
+                        ),
+                    ],
+                  ),
+                );
+              }),
         ],
       ),
     );
   }
 
   /// Common widget
-  Widget _buildStableTableRow(BuildContext context) {
+  Widget _buildStableTableRow(BuildContext context, data) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: 29.h,
+        horizontal: 1.h,
         vertical: 8.v,
       ),
       decoration: AppDecoration.fillOnErrorContainer,
@@ -196,20 +177,20 @@ class ViolationHisotoryScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            "01/24/2024",
+            DateFormat.yMMMd().add_jm().format(data['dateTime'].toDate()),
             style: CustomTextStyles.bodyMediumInterErrorContainer,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 47.h),
+            padding: EdgeInsets.only(left: 20.h),
             child: Text(
               "Show",
               style: CustomTextStyles.bodyMediumInterErrorContainer,
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 42.h),
+            padding: EdgeInsets.only(left: 60.h),
             child: Text(
-              "Paid",
+              data['status'],
               style: CustomTextStyles.labelMediumMedium,
             ),
           ),
