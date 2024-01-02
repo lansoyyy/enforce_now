@@ -2,6 +2,7 @@ import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/widgets/custom_icon_button.dart';
 import 'package:enforcenow/widgets/custom_search_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 // ignore_for_file: must_be_immutable
 class MainMenuScreen extends StatelessWidget {
@@ -150,6 +151,8 @@ class MainMenuScreen extends StatelessWidget {
             ]));
   }
 
+  final box = GetStorage();
+
   /// Section Widget
   Widget _buildFifteenSection(BuildContext context) {
     return Container(
@@ -164,6 +167,7 @@ class MainMenuScreen extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
+                    box.write('type', 'Complete');
                     onTapComplete(context);
                   },
                   child: Container(
@@ -201,6 +205,7 @@ class MainMenuScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    box.write('type', 'Incomplete');
                     onTapComplete(context);
                   },
                   child: Container(
@@ -238,6 +243,7 @@ class MainMenuScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    box.write('type', 'No credentials');
                     onTapComplete(context);
                   },
                   child: Container(

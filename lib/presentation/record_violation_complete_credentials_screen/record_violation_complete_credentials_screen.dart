@@ -1,12 +1,13 @@
 import 'package:enforcenow/core/app_export.dart';
+import 'package:enforcenow/core/services/add_record.dart';
 import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:enforcenow/widgets/custom_text_form_field.dart';
+import 'package:enforcenow/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 // ignore_for_file: must_be_immutable
 class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
-  RecordViolationCompleteCredentialsScreen({Key? key}) : super(key: key);
-
   TextEditingController surnameController = TextEditingController();
 
   TextEditingController firstNameController = TextEditingController();
@@ -14,6 +15,8 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController editTextController = TextEditingController();
+
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,18 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
                   _buildEditTextSection(context),
                   SizedBox(height: 31.v),
                   CustomElevatedButton(
-                      text: "Next",
+                      onPressed: () {
+                        addRecord(
+                            surnameController.text,
+                            firstNameController.text,
+                            nameController.text,
+                            editTextController.text,
+                            box.read('type'));
+                        showToast('Record added succesfully!');
+                        Navigator.pushReplacementNamed(
+                            context, AppRoutes.mainMenuScreen);
+                      },
+                      text: "Continue",
                       margin: EdgeInsets.symmetric(horizontal: 7.h)),
                   SizedBox(height: 5.v)
                 ]))));
