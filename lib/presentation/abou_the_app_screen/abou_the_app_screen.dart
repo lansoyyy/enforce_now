@@ -87,11 +87,7 @@ class AbouTheAppScreen extends StatelessWidget {
           Align(
               alignment: Alignment.topCenter,
               child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 28.v),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(ImageConstant.imgGroup156),
-                          fit: BoxFit.cover)),
+                  decoration: BoxDecoration(color: Colors.blue),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     CustomAppBar(
                         leadingWidth: 41.h,

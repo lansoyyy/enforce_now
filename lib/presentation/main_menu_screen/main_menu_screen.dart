@@ -1,4 +1,3 @@
-import '../main_menu_screen/widgets/complete_item_widget.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/widgets/custom_icon_button.dart';
 import 'package:enforcenow/widgets/custom_search_view.dart';
@@ -117,6 +116,7 @@ class MainMenuScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 16.v),
         decoration: BoxDecoration(
+            color: Colors.blue[700],
             image: DecorationImage(
                 image: AssetImage(ImageConstant.imgGroup156),
                 fit: BoxFit.cover)),
@@ -158,19 +158,124 @@ class MainMenuScreen extends StatelessWidget {
           Text("Record violation", style: theme.textTheme.titleLarge),
           SizedBox(height: 17.v),
           SizedBox(
-              height: 103.v,
-              child: ListView.separated(
-                  padding: EdgeInsets.only(right: 4.h),
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(width: 10.h);
+            height: 103.v,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    onTapComplete(context);
                   },
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return CompleteItemWidget(onTapComplete: () {
-                      onTapComplete(context);
-                    });
-                  }))
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.h,
+                      vertical: 4.v,
+                    ),
+                    decoration: AppDecoration.fillBlueGray.copyWith(
+                      borderRadius: BorderRadiusStyle.roundedBorder10,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: 6.v),
+                        Icon(
+                          Icons.file_copy,
+                          size: 32,
+                        ),
+                        SizedBox(height: 7.v),
+                        SizedBox(
+                          width: 49.h,
+                          child: Text(
+                            "Complete credentials",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: CustomTextStyles.bodySmallBebasNeueBlue700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    onTapComplete(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.h,
+                      vertical: 4.v,
+                    ),
+                    decoration: AppDecoration.fillBlueGray.copyWith(
+                      borderRadius: BorderRadiusStyle.roundedBorder10,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: 6.v),
+                        Icon(
+                          Icons.system_security_update_warning_rounded,
+                          size: 32,
+                        ),
+                        SizedBox(height: 7.v),
+                        SizedBox(
+                          width: 49.h,
+                          child: Text(
+                            "Incomplete credentials",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: CustomTextStyles.bodySmallBebasNeueBlue700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    onTapComplete(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.h,
+                      vertical: 4.v,
+                    ),
+                    decoration: AppDecoration.fillBlueGray.copyWith(
+                      borderRadius: BorderRadiusStyle.roundedBorder10,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: 6.v),
+                        Icon(
+                          Icons.no_sim_outlined,
+                          size: 32,
+                        ),
+                        SizedBox(height: 7.v),
+                        SizedBox(
+                          width: 49.h,
+                          child: Text(
+                            "No credentials",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: CustomTextStyles.bodySmallBebasNeueBlue700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ]));
   }
 
