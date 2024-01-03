@@ -14,6 +14,7 @@ Future addRecord(lname, fname, mname, license, type) async {
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'type': type,
     'dateTime': DateTime.now(),
+    'isPaid': false
   };
 
   await docUser.set(json);
