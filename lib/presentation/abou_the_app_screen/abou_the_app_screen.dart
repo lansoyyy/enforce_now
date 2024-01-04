@@ -1,4 +1,3 @@
-import '../abou_the_app_screen/widgets/payment_item_widget.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_leading_image.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_subtitle_one.dart';
@@ -63,27 +62,17 @@ class AbouTheAppScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildUserProfile(BuildContext context) {
     return SizedBox(
-        height: 241.v,
+        height: 350.v,
         width: double.maxFinite,
         child: Stack(alignment: Alignment.topCenter, children: [
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  height: 241.v,
-                  padding: EdgeInsets.symmetric(horizontal: 32.h),
-                  decoration: AppDecoration.outlineBlack.copyWith(
-                      borderRadius: BorderRadiusStyle.roundedBorder10),
-                  child: ListView.separated(
-                      padding:
-                          EdgeInsets.only(left: 7.h, top: 130.v, right: 7.h),
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(width: 29.h);
-                      },
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return PaymentItemWidget();
-                      }))),
+          Padding(
+            padding: const EdgeInsets.only(top: 150),
+            child: Image.asset(
+              'assets/images/team.png',
+              width: 1000,
+              height: 1000,
+            ),
+          ),
           Align(
               alignment: Alignment.topCenter,
               child: Container(

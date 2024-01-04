@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_leading_image.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:enforcenow/widgets/app_bar/custom_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TrafficEnforcerInfoScreen extends StatelessWidget {
@@ -21,6 +23,10 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
 
   /// Section Widget
   Widget _buildEditAccount(BuildContext context) {
+    final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
     return Container(
         padding: EdgeInsets.symmetric(vertical: 11.v),
         decoration: BoxDecoration(
@@ -51,19 +57,37 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                       Icons.account_circle_sharp,
                       size: 48,
                     ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 16.h),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Ed Jay Ogoy",
-                                  style: CustomTextStyles.titleMediumGray900),
-                              SizedBox(height: 6.v),
-                              Text("085812345678",
-                                  style: CustomTextStyles.bodySmallAsapGray900),
-                              Text("edjayogoy@gmail.com",
-                                  style: CustomTextStyles.bodySmallAsapGray900)
-                            ]))
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: userData,
+                        builder: (context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox();
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox();
+                          }
+                          dynamic data = snapshot.data;
+                          return Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(data['name'],
+                                        style: CustomTextStyles
+                                            .titleMediumGray900),
+                                    SizedBox(height: 6.v),
+                                    Text(data['number'],
+                                        style: CustomTextStyles
+                                            .bodySmallAsapGray900),
+                                    Text(data['email'],
+                                        style: CustomTextStyles
+                                            .bodySmallAsapGray900)
+                                  ]));
+                        })
                   ]))
             ]));
   }
@@ -80,14 +104,19 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                   child:
                       Text("My Account", style: theme.textTheme.titleLarge))),
           SizedBox(height: 17.v),
-          Padding(
-              padding: EdgeInsets.only(left: 2.h),
-              child:
-                  _buildAccountPrivacy(context, text: "Personal Information")),
           SizedBox(height: 16.v),
-          Padding(
-              padding: EdgeInsets.only(left: 2.h),
-              child: _buildAccountPrivacy(context, text: "Account privacy")),
+          GestureDetector(
+            onTap: () {
+              showAboutDialog(
+                  context: context,
+                  applicationName: 'Enforce Now',
+                  applicationLegalese: 'Enforce Now',
+                  applicationVersion: 'v1.0.0');
+            },
+            child: Padding(
+                padding: EdgeInsets.only(left: 2.h),
+                child: _buildAccountPrivacy(context, text: "Account privacy")),
+          ),
           SizedBox(height: 5.v)
         ]));
   }

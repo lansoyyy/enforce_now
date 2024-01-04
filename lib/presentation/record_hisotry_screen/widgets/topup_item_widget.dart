@@ -17,6 +17,7 @@ class TopupItemWidget extends StatelessWidget {
       onTap: () {
         box.write('name', data['fname'] + ' ' + data['lname']);
         box.write('license', data['license']);
+        box.write('payment', data['payment']);
         box.write('id', data.id);
         Navigator.pushNamed(context, AppRoutes.violationHisotoryScreen);
       },
@@ -62,7 +63,7 @@ class TopupItemWidget extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "500",
+                      data['payment'].toString(),
                       style: CustomTextStyles.bodyLargeGreen800,
                     ),
                   ),

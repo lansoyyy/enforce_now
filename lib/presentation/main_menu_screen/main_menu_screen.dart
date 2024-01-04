@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/widgets/custom_icon_button.dart';
 import 'package:enforcenow/widgets/custom_search_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -112,43 +114,60 @@ class MainMenuScreen extends StatelessWidget {
                     ]))));
   }
 
+  final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
+      .collection('Users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .snapshots();
+
   /// Section Widget
   Widget _buildWelcomeMrEdJaySection(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 16.v),
-        decoration: BoxDecoration(
-            color: Colors.blue[700],
-            image: DecorationImage(
-                image: AssetImage(ImageConstant.imgGroup156),
-                fit: BoxFit.cover)),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(height: 73.v),
-              Padding(
-                  padding: EdgeInsets.only(left: 19.h),
-                  child: Text("Welcome Mr. Ed Jay Ogoy",
-                      style: CustomTextStyles.titleMediumOnErrorContainer)),
-              SizedBox(height: 27.v),
-              Padding(
-                  padding: EdgeInsets.only(left: 3.h),
-                  child: Row(children: [
-                    Expanded(
-                        child: CustomSearchView(
-                            controller: searchController, hintText: "Search ")),
+    return StreamBuilder<DocumentSnapshot>(
+        stream: userData,
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return const SizedBox();
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Something went wrong'));
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox();
+          }
+          dynamic data = snapshot.data;
+          return Container(
+              padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 16.v),
+              decoration: BoxDecoration(
+                color: Colors.blue[700],
+              ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 25.v),
                     Padding(
-                        padding: EdgeInsets.only(left: 16.h),
-                        child: CustomIconButton(
-                            height: 40.adaptSize,
-                            width: 40.adaptSize,
-                            padding: EdgeInsets.all(12.h),
-                            decoration:
-                                IconButtonStyleHelper.fillOnPrimaryContainer,
-                            child: CustomImageView(
-                                imagePath: ImageConstant.imgSearchIcon)))
-                  ]))
-            ]));
+                        padding: EdgeInsets.only(left: 19.h),
+                        child: Text("Welcome Mr. ${data['name']}",
+                            style:
+                                CustomTextStyles.titleMediumOnErrorContainer)),
+                    SizedBox(height: 27.v),
+                    Padding(
+                        padding: EdgeInsets.only(left: 3.h),
+                        child: Row(children: [
+                          Expanded(
+                              child: CustomSearchView(
+                                  controller: searchController,
+                                  hintText: "Search ")),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: CustomIconButton(
+                                  height: 40.adaptSize,
+                                  width: 40.adaptSize,
+                                  padding: EdgeInsets.all(12.h),
+                                  decoration: IconButtonStyleHelper
+                                      .fillOnPrimaryContainer,
+                                  child: CustomImageView(
+                                      imagePath: ImageConstant.imgSearchIcon)))
+                        ]))
+                  ]));
+        });
   }
 
   final box = GetStorage();
