@@ -1,1 +1,26 @@
-
+List<Map<String, dynamic>> violations = [
+  {'violation': 'Truck Ban', 'fine': 200},
+  {'violation': 'Colorum', 'fine': 300},
+  {'violation': 'Operating out of line', 'fine': 150},
+  {'violation': 'Invalid Delinquent', 'fine': 200},
+  {'violation': 'Unloading', 'fine': 500},
+  {'violation': 'Top load passengers/Cargoes', 'fine': 300},
+  {'violation': 'Overspeeding', 'fine': 400},
+  {'violation': 'Beating the red Light', 'fine': 300},
+  {'violation': 'Improvised mufflers', 'fine': 200},
+  {'violation': 'No side mirror/No seat belt', 'fine': 300},
+  {'violation': 'No plate', 'fine': 200},
+  {'violation': 'Failure to carry OR/CR', 'fine': 400},
+  {'violation': 'Illegal Terminal', 'fine': 500},
+  {'violation': 'Trip cutting', 'fine': 300},
+  {'violation': 'Driving under the Influence of liquor or drugs', 'fine': 500},
+  {'violation': 'Reckless Driving', 'fine': 500},
+  {'violation': 'No left turn', 'fine': 200},
+  {
+    'violation': 'Failure to obey Traffic device/traffic Enforcer/signs',
+    'fine': 500
+  },
+  {'violation': 'Clamping', 'fine': 400},
+  {'violation': 'Obstruction to sidewalk', 'fine': 400},
+  {'violation': 'Illegal Parking', 'fine': 300},
+];
