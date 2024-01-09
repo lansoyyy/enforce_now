@@ -1,8 +1,7 @@
 import 'package:enforcenow/core/app_export.dart';
-import 'package:enforcenow/core/services/add_record.dart';
+import 'package:enforcenow/presentation/record_violation_complete_credentials_screen/violation_list.dart';
 import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:enforcenow/widgets/custom_text_form_field.dart';
-import 'package:enforcenow/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -16,6 +15,17 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
 
   TextEditingController editTextController = TextEditingController();
 
+  TextEditingController bdayTextController = TextEditingController();
+  TextEditingController suffixTextController = TextEditingController();
+
+  TextEditingController platenumberTextController = TextEditingController();
+  TextEditingController typeTextController = TextEditingController();
+  TextEditingController classificationTextController = TextEditingController();
+  TextEditingController addressTextController = TextEditingController();
+  TextEditingController placeTextController = TextEditingController();
+  TextEditingController ownernameController = TextEditingController();
+  TextEditingController owneraddressController = TextEditingController();
+
   final box = GetStorage();
 
   @override
@@ -26,33 +36,86 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
             body: Container(
                 width: double.maxFinite,
                 padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 16.v),
-                child: Column(children: [
-                  _buildArrowLeftSection(context),
-                  SizedBox(height: 32.v),
-                  _buildSurnameSection(context),
-                  SizedBox(height: 9.v),
-                  _buildFirstNameSection(context),
-                  SizedBox(height: 11.v),
-                  _buildNameSection(context),
-                  SizedBox(height: 11.v),
-                  _buildEditTextSection(context),
-                  SizedBox(height: 31.v),
-                  CustomElevatedButton(
-                      onPressed: () {
-                        addRecord(
-                            surnameController.text,
-                            firstNameController.text,
-                            nameController.text,
-                            editTextController.text,
-                            box.read('type'));
-                        showToast('Record added succesfully!');
-                        Navigator.pushReplacementNamed(
-                            context, AppRoutes.mainMenuScreen);
-                      },
-                      text: "Continue",
-                      margin: EdgeInsets.symmetric(horizontal: 7.h)),
-                  SizedBox(height: 5.v)
-                ]))));
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    _buildArrowLeftSection(context),
+                    SizedBox(height: 32.v),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                            width: 175, child: _buildSurnameSection(context)),
+                        SizedBox(
+                            width: 175, child: _buildFirstNameSection(context)),
+                      ],
+                    ),
+                    SizedBox(height: 9.v),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(width: 175, child: buildbday(context)),
+                        SizedBox(width: 175, child: suffix(context)),
+                      ],
+                    ),
+                    SizedBox(height: 9.v),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                            width: 175, child: _buildEditTextSection(context)),
+                        SizedBox(width: 175, child: platenumber(context)),
+                      ],
+                    ),
+                    SizedBox(height: 9.v),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(width: 175, child: type(context)),
+                        SizedBox(width: 175, child: classification(context)),
+                      ],
+                    ),
+                    SizedBox(height: 9.v),
+                    address(context),
+                    SizedBox(height: 9.v),
+                    place(context),
+                    SizedBox(height: 9.v),
+                    owndername(context),
+                    SizedBox(height: 9.v),
+                    ownderaddress(context),
+                    SizedBox(height: 31.v),
+                    CustomElevatedButton(
+                        onPressed: () {
+                          // addRecord(
+                          //     surnameController.text,
+                          //     firstNameController.text,
+                          //     nameController.text,
+                          //     editTextController.text,
+                          //     box.read('type'));
+                          // showToast('Record added succesfully!');
+                          // Navigator.pushReplacementNamed(
+                          //     context, AppRoutes.mainMenuScreen);
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ViolationList(
+                                  lname:
+                                      ' ${surnameController.text} ${suffixTextController.text}',
+                                  fname: '${firstNameController.text}',
+                                  bday: bdayTextController.text,
+                                  license: editTextController.text,
+                                  plate: platenumberTextController.text,
+                                  model: typeTextController.text,
+                                  classification:
+                                      classificationTextController.text,
+                                  address: addressTextController.text,
+                                  place: placeTextController.text,
+                                  ownername: ownernameController.text,
+                                  owneraddress: owneraddressController.text)));
+                        },
+                        text: "Continue",
+                        margin: EdgeInsets.symmetric(horizontal: 7.h)),
+                    SizedBox(height: 5.v)
+                  ]),
+                ))));
   }
 
   /// Section Widget
@@ -128,7 +191,7 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildNameSection(BuildContext context) {
+  Widget buildbday(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -136,13 +199,90 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
               opacity: 0.7,
               child: Padding(
                   padding: EdgeInsets.only(left: 18.h),
-                  child: Text("Violator’s  Middle Name",
+                  child: Text("Birthdate",
                       style: CustomTextStyles.bodyMediumInterBlack90002))),
           SizedBox(height: 1.v),
           Padding(
               padding: EdgeInsets.only(left: 18.h),
               child: CustomTextFormField(
-                  controller: nameController, alignment: Alignment.centerRight))
+                  controller: bdayTextController,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget suffix(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 18.h),
+                  child: Text("Suffix",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: suffixTextController,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget platenumber(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 18.h),
+                  child: Text("Platenumber",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: platenumberTextController,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget type(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 18.h),
+                  child: Text("Type/Model",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: typeTextController,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget classification(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 18.h),
+                  child: Text("Classification",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: classificationTextController,
+                  alignment: Alignment.centerRight))
         ]));
   }
 
@@ -162,6 +302,86 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
               padding: EdgeInsets.only(left: 18.h),
               child: CustomTextFormField(
                   controller: editTextController,
+                  textInputAction: TextInputAction.done,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget place(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 22.h),
+                  child: Text("Place of Violation",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: placeTextController,
+                  textInputAction: TextInputAction.done,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget address(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 22.h),
+                  child: Text("Address",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: addressTextController,
+                  textInputAction: TextInputAction.done,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget owndername(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 22.h),
+                  child: Text("Owner's Name",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: ownernameController,
+                  textInputAction: TextInputAction.done,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget ownderaddress(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 22.h),
+                  child: Text("Owner's Address",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: owneraddressController,
                   textInputAction: TextInputAction.done,
                   alignment: Alignment.centerRight))
         ]));
