@@ -30,9 +30,12 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 11.v),
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(ImageConstant.imgGroup156),
-                fit: BoxFit.cover)),
+          image: DecorationImage(
+              image: AssetImage(
+                'assets/images/back.png',
+              ),
+              fit: BoxFit.cover),
+        ),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,

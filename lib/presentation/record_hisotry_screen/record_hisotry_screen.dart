@@ -28,9 +28,12 @@ class RecordHisotryScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 28.v),
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(ImageConstant.imgGroup156),
-                fit: BoxFit.cover)),
+          image: DecorationImage(
+              image: AssetImage(
+                'assets/images/back.png',
+              ),
+              fit: BoxFit.cover),
+        ),
         child: CustomAppBar(
             leadingWidth: 41.h,
             leading: AppbarLeadingImage(

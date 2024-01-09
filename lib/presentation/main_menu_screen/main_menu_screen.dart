@@ -135,7 +135,11 @@ class MainMenuScreen extends StatelessWidget {
           return Container(
               padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 16.v),
               decoration: BoxDecoration(
-                color: Colors.blue[700],
+                image: DecorationImage(
+                    image: AssetImage(
+                      'assets/images/back.png',
+                    ),
+                    fit: BoxFit.cover),
               ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
