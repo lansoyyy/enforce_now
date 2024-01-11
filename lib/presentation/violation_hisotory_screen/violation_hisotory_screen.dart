@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
+import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+
+import '../record_violation_complete_credentials_screen/violation_list.dart';
 
 class ViolationHisotoryScreen extends StatelessWidget {
   final box = GetStorage();
@@ -23,7 +26,7 @@ class ViolationHisotoryScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Violation History",
+                  "Violation Historys",
                   style: theme.textTheme.headlineLarge,
                 ),
               ),
@@ -46,7 +49,54 @@ class ViolationHisotoryScreen extends StatelessWidget {
               SizedBox(height: 11.v),
               _buildLicenseNumber(context),
               Spacer(),
-              SizedBox(height: 53.v),
+              Expanded(child: SizedBox(height: 53.v)),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Records')
+                      .where('license', isEqualTo: box.read('license'))
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return const Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.black,
+                        )),
+                      );
+                    }
+
+                    final data = snapshot.requireData;
+                    return CustomElevatedButton(
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ViolationList(
+                                  lname:
+                                      ' ${data.docs.first['lname']} ${data.docs.first['mname']}',
+                                  fname: '${data.docs.first['fname']}',
+                                  bday: data.docs.first['bday'],
+                                  license: data.docs.first['license'],
+                                  plate: data.docs.first['platenumber'],
+                                  model: data.docs.first['model'],
+                                  classification:
+                                      data.docs.first['classification'],
+                                  address: data.docs.first['address'],
+                                  place: data.docs.first['place'],
+                                  ownername: data.docs.first['ownername'],
+                                  owneraddress:
+                                      data.docs.first['owneraddress'])));
+                        },
+                        text: "Add a Record",
+                        margin: EdgeInsets.symmetric(horizontal: 7.h));
+                  }),
+              SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

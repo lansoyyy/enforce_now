@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/presentation/record_violation_complete_credentials_screen/violation_list.dart';
 import 'package:enforcenow/widgets/custom_elevated_button.dart';
@@ -6,7 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 // ignore_for_file: must_be_immutable
-class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
+class RecordViolationCompleteCredentialsScreen extends StatefulWidget {
+  @override
+  State<RecordViolationCompleteCredentialsScreen> createState() =>
+      _RecordViolationCompleteCredentialsScreenState();
+}
+
+class _RecordViolationCompleteCredentialsScreenState
+    extends State<RecordViolationCompleteCredentialsScreen> {
   TextEditingController surnameController = TextEditingController();
 
   TextEditingController firstNameController = TextEditingController();
@@ -16,106 +24,236 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
   TextEditingController editTextController = TextEditingController();
 
   TextEditingController bdayTextController = TextEditingController();
+
   TextEditingController suffixTextController = TextEditingController();
 
   TextEditingController platenumberTextController = TextEditingController();
+
   TextEditingController typeTextController = TextEditingController();
+
   TextEditingController classificationTextController = TextEditingController();
+
   TextEditingController addressTextController = TextEditingController();
+
   TextEditingController placeTextController = TextEditingController();
+
   TextEditingController ownernameController = TextEditingController();
+
   TextEditingController owneraddressController = TextEditingController();
 
   final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
+    print(editTextController.text);
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
-            body: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 16.v),
-                child: SingleChildScrollView(
-                  child: Column(children: [
-                    _buildArrowLeftSection(context),
-                    SizedBox(height: 32.v),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                            width: 175, child: _buildSurnameSection(context)),
-                        SizedBox(
-                            width: 175, child: _buildFirstNameSection(context)),
-                      ],
-                    ),
-                    SizedBox(height: 9.v),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(width: 175, child: buildbday(context)),
-                        SizedBox(width: 175, child: suffix(context)),
-                      ],
-                    ),
-                    SizedBox(height: 9.v),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                            width: 175, child: _buildEditTextSection(context)),
-                        SizedBox(width: 175, child: platenumber(context)),
-                      ],
-                    ),
-                    SizedBox(height: 9.v),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(width: 175, child: type(context)),
-                        SizedBox(width: 175, child: classification(context)),
-                      ],
-                    ),
-                    SizedBox(height: 9.v),
-                    address(context),
-                    SizedBox(height: 9.v),
-                    place(context),
-                    SizedBox(height: 9.v),
-                    owndername(context),
-                    SizedBox(height: 9.v),
-                    ownderaddress(context),
-                    SizedBox(height: 31.v),
-                    CustomElevatedButton(
-                        onPressed: () {
-                          // addRecord(
-                          //     surnameController.text,
-                          //     firstNameController.text,
-                          //     nameController.text,
-                          //     editTextController.text,
-                          //     box.read('type'));
-                          // showToast('Record added succesfully!');
-                          // Navigator.pushReplacementNamed(
-                          //     context, AppRoutes.mainMenuScreen);
+            body: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Records')
+                    .where('license', isEqualTo: editTextController.text)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.black,
+                      )),
+                    );
+                  }
 
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViolationList(
-                                  lname:
-                                      ' ${surnameController.text} ${suffixTextController.text}',
-                                  fname: '${firstNameController.text}',
-                                  bday: bdayTextController.text,
-                                  license: editTextController.text,
-                                  plate: platenumberTextController.text,
-                                  model: typeTextController.text,
-                                  classification:
-                                      classificationTextController.text,
-                                  address: addressTextController.text,
-                                  place: placeTextController.text,
-                                  ownername: ownernameController.text,
-                                  owneraddress: owneraddressController.text)));
-                        },
-                        text: "Continue",
-                        margin: EdgeInsets.symmetric(horizontal: 7.h)),
-                    SizedBox(height: 5.v)
-                  ]),
-                ))));
+                  final data1 = snapshot.requireData;
+                  return Container(
+                      width: double.maxFinite,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 9.h, vertical: 16.v),
+                      child: SingleChildScrollView(
+                        child: Column(children: [
+                          _buildArrowLeftSection(context),
+                          SizedBox(height: 32.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                  width: 175,
+                                  child: _buildSurnameSection(context)),
+                              SizedBox(
+                                  width: 175,
+                                  child: _buildFirstNameSection(context)),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(width: 175, child: buildbday(context)),
+                              SizedBox(width: 175, child: suffix(context)),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                width: 175,
+                                child: Padding(
+                                    padding: EdgeInsets.only(right: 7.h),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Opacity(
+                                              opacity: 0.7,
+                                              child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 22.h),
+                                                  child: Text("License No.",
+                                                      style: CustomTextStyles
+                                                          .bodyMediumInterBlack90002))),
+                                          SizedBox(height: 1.v),
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 18.h),
+                                              child: CustomTextFormField(
+                                                  controller:
+                                                      editTextController,
+                                                  textInputAction:
+                                                      TextInputAction.done,
+                                                  alignment:
+                                                      Alignment.centerRight))
+                                        ])),
+                              ),
+                              SizedBox(width: 175, child: platenumber(context)),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(width: 175, child: type(context)),
+                              SizedBox(
+                                  width: 175, child: classification(context)),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          address(context),
+                          SizedBox(height: 9.v),
+                          place(context),
+                          SizedBox(height: 9.v),
+                          owndername(context),
+                          SizedBox(height: 9.v),
+                          ownderaddress(context),
+                          SizedBox(height: 31.v),
+                          CustomElevatedButton(
+                              onPressed: () async {
+                                int tots = 0;
+
+                                await FirebaseFirestore.instance
+                                    .collection('Records')
+                                    .where('license',
+                                        isEqualTo: editTextController.text)
+                                    .get()
+                                    .then((QuerySnapshot querySnapshot) {
+                                  setState(() {
+                                    tots = querySnapshot.docs.length;
+                                  });
+                                });
+                                if (tots != 0) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text('Records Available'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Close'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              box.write('license',
+                                                  editTextController.text);
+                                              Navigator.pushNamed(
+                                                  context,
+                                                  AppRoutes
+                                                      .violationHisotoryScreen);
+                                            },
+                                            child: Text('Continue'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text('No Records'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Close'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => ViolationList(
+                                                      lname:
+                                                          ' ${surnameController.text} ${suffixTextController.text}',
+                                                      fname:
+                                                          '${firstNameController.text}',
+                                                      bday: bdayTextController
+                                                          .text,
+                                                      license:
+                                                          editTextController
+                                                              .text,
+                                                      plate:
+                                                          platenumberTextController
+                                                              .text,
+                                                      model: typeTextController
+                                                          .text,
+                                                      classification:
+                                                          classificationTextController
+                                                              .text,
+                                                      address:
+                                                          addressTextController
+                                                              .text,
+                                                      place: placeTextController
+                                                          .text,
+                                                      ownername:
+                                                          ownernameController
+                                                              .text,
+                                                      owneraddress:
+                                                          owneraddressController
+                                                              .text)));
+                                            },
+                                            child: Text('Add Record'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                              text: "Continue",
+                              margin: EdgeInsets.symmetric(horizontal: 7.h)),
+                          SizedBox(height: 5.v)
+                        ]),
+                      ));
+                })));
   }
 
   /// Section Widget
@@ -143,7 +281,7 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
                                 text: "Record Violation\n",
                                 style: theme.textTheme.headlineLarge),
                             TextSpan(
-                                text: "Complete Credentials",
+                                text: "${box.read('type')} Credentials",
                                 style: CustomTextStyles.headlineLargeBlueA200)
                           ]),
                           textAlign: TextAlign.center)))
@@ -282,27 +420,6 @@ class RecordViolationCompleteCredentialsScreen extends StatelessWidget {
               padding: EdgeInsets.only(left: 18.h),
               child: CustomTextFormField(
                   controller: classificationTextController,
-                  alignment: Alignment.centerRight))
-        ]));
-  }
-
-  /// Section Widget
-  Widget _buildEditTextSection(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(right: 7.h),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Opacity(
-              opacity: 0.7,
-              child: Padding(
-                  padding: EdgeInsets.only(left: 22.h),
-                  child: Text("License No.",
-                      style: CustomTextStyles.bodyMediumInterBlack90002))),
-          SizedBox(height: 1.v),
-          Padding(
-              padding: EdgeInsets.only(left: 18.h),
-              child: CustomTextFormField(
-                  controller: editTextController,
-                  textInputAction: TextInputAction.done,
                   alignment: Alignment.centerRight))
         ]));
   }

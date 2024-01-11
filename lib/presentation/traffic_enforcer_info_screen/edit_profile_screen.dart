@@ -1,16 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
-import 'package:enforcenow/presentation/traffic_enforcer_info_screen/edit_profile_screen.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_leading_image.dart';
 import 'package:enforcenow/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:enforcenow/widgets/app_bar/custom_app_bar.dart';
-import 'package:enforcenow/widgets/custom_elevated_button.dart';
+import 'package:enforcenow/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class TrafficEnforcerInfoScreen extends StatelessWidget {
-  const TrafficEnforcerInfoScreen({Key? key}) : super(key: key);
+import '../../widgets/custom_elevated_button.dart';
+import '../../widgets/custom_text_form_field.dart';
 
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  final num = TextEditingController();
+  final email = TextEditingController();
+  final position = TextEditingController();
+  final address = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
@@ -31,7 +42,12 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                     return const SizedBox();
                   }
                   dynamic data = snapshot.data;
-                  return Center(
+
+                  num.text = data['number'];
+                  email.text = data['email'];
+                  position.text = data['type'];
+                  address.text = data['address'];
+                  return SingleChildScrollView(
                     child: Column(
                       children: [
                         Stack(
@@ -59,7 +75,7 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                                         onTapArrowLeft(context);
                                       }),
                                   title: AppbarSubtitleOne(
-                                      text: "MY PROFILE",
+                                      text: "EDIT PROFILE",
                                       margin: EdgeInsets.only(left: 16.h))),
                             ),
                             Padding(
@@ -79,54 +95,113 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                         ),
                         Text(data['name'], style: theme.textTheme.titleLarge),
                         SizedBox(
+                          height: 30,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(right: 7.h),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Opacity(
+                                      opacity: 0.7,
+                                      child: Padding(
+                                          padding: EdgeInsets.only(left: 20.h),
+                                          child: Text("Contact Number",
+                                              style: CustomTextStyles
+                                                  .bodyMediumInterBlack90002))),
+                                  SizedBox(height: 2.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: CustomTextFormField(
+                                          controller: num,
+                                          alignment: Alignment.centerRight))
+                                ])),
+                        SizedBox(
                           height: 10,
                         ),
+                        Padding(
+                            padding: EdgeInsets.only(right: 7.h),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Opacity(
+                                      opacity: 0.7,
+                                      child: Padding(
+                                          padding: EdgeInsets.only(left: 20.h),
+                                          child: Text("Email",
+                                              style: CustomTextStyles
+                                                  .bodyMediumInterBlack90002))),
+                                  SizedBox(height: 2.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: CustomTextFormField(
+                                          controller: email,
+                                          alignment: Alignment.centerRight))
+                                ])),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(right: 7.h),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Opacity(
+                                      opacity: 0.7,
+                                      child: Padding(
+                                          padding: EdgeInsets.only(left: 20.h),
+                                          child: Text("Position",
+                                              style: CustomTextStyles
+                                                  .bodyMediumInterBlack90002))),
+                                  SizedBox(height: 2.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: CustomTextFormField(
+                                          controller: position,
+                                          alignment: Alignment.centerRight))
+                                ])),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(right: 7.h),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Opacity(
+                                      opacity: 0.7,
+                                      child: Padding(
+                                          padding: EdgeInsets.only(left: 20.h),
+                                          child: Text("Address",
+                                              style: CustomTextStyles
+                                                  .bodyMediumInterBlack90002))),
+                                  SizedBox(height: 2.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: CustomTextFormField(
+                                          controller: address,
+                                          alignment: Alignment.centerRight))
+                                ])),
+                        SizedBox(
+                          height: 30,
+                        ),
                         CustomElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditProfileScreen()));
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(data.id)
+                                  .update({
+                                'number': num.text,
+                                'address': address.text,
+                                'type': position.text,
+                                'email': email.text,
+                              });
+                              showToast('Profile updated!');
+                              Navigator.of(context).pop();
                             },
                             height: 30,
                             width: 150,
-                            text: 'Edit profile'),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(data['number'], style: theme.textTheme.bodyMedium),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(data['email'], style: theme.textTheme.bodyMedium),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 50, right: 50),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Position:',
-                                  style: theme.textTheme.titleMedium),
-                              Text(data['type'],
-                                  style: theme.textTheme.titleLarge),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 50, right: 50),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Address:',
-                                  style: theme.textTheme.titleMedium),
-                              Text(data['address'],
-                                  style: theme.textTheme.titleLarge),
-                            ],
-                          ),
-                        ),
+                            text: 'Save'),
                       ],
                     ),
                   );
