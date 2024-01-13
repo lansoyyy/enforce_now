@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
+import 'package:enforcenow/presentation/record_violation_complete_credentials_screen/record_no_credentials.dart';
 import 'package:enforcenow/widgets/custom_icon_button.dart';
 import 'package:enforcenow/widgets/custom_search_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -267,7 +268,8 @@ class MainMenuScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     box.write('type', 'No credentials');
-                    onTapComplete(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecordNoCredentials()));
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
