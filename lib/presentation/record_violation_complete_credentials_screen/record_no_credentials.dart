@@ -56,6 +56,8 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
 
   late String imageURL = '';
 
+  List imageURLs = [];
+
   Future<void> uploadPicture(String inputSource) async {
     final picker = ImagePicker();
     XFile pickedImage;
@@ -105,7 +107,11 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
 
         Navigator.of(context).pop();
 
+        imageURLs.add(imageURL);
+
         showToast('Uploaded!');
+
+        setState(() {});
       } on firebase_storage.FirebaseException catch (error) {
         if (kDebugMode) {
           print(error);
@@ -167,14 +173,66 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
                                   size: 75,
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
-                                Text('Documentation')
+                                Text('Take Photos')
                               ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text('or'),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                              width: 175,
+                              child: CustomElevatedButton(
+                                  onPressed: () {
+                                    uploadPicture('gallery');
+                                  },
+                                  text: 'Browse Photos')),
+                          SizedBox(height: 9.v),
+                          Divider(),
+                          SizedBox(height: 9.v),
+                          SizedBox(
+                            height: 125,
+                            child: ListView.builder(
+                              itemCount: imageURLs.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text('Image ${index + 1}.jpg'),
+                                  subtitle: LinearProgressIndicator(
+                                    value: 100,
+                                  ),
+                                  trailing: SizedBox(
+                                    width: 100,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.visibility),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              imageURLs.removeAt(index);
+                                            });
+                                          },
+                                          icon: Icon(Icons.delete),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           SizedBox(height: 9.v),
                           place(context),
+                          SizedBox(height: 9.v),
+                          comment(context),
                           SizedBox(height: 31.v),
                           CustomElevatedButton(
                               onPressed: () async {
@@ -432,6 +490,26 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
               padding: EdgeInsets.only(left: 18.h),
               child: CustomTextFormField(
                   controller: placeTextController,
+                  textInputAction: TextInputAction.done,
+                  alignment: Alignment.centerRight))
+        ]));
+  }
+
+  Widget comment(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 7.h),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Opacity(
+              opacity: 0.7,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 22.h),
+                  child: Text("Comments",
+                      style: CustomTextStyles.bodyMediumInterBlack90002))),
+          SizedBox(height: 1.v),
+          Padding(
+              padding: EdgeInsets.only(left: 18.h),
+              child: CustomTextFormField(
+                  controller: commentController,
                   textInputAction: TextInputAction.done,
                   alignment: Alignment.centerRight))
         ]));
