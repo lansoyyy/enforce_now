@@ -14,13 +14,13 @@ class SplashScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 16.h, top: 165.v, right: 16.h),
                 child: Column(children: [
                   SizedBox(
-                      height: 173.v,
+                      height: 250.v,
                       width: 232.h,
                       child:
                           Stack(alignment: Alignment.bottomCenter, children: [
                         CustomImageView(
                             imagePath: ImageConstant.imgSingleLogo2,
-                            height: 123.v,
+                            height: 175.v,
                             width: 130.h,
                             alignment: Alignment.topCenter),
                         Align(
@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
                           width: 134.h,
                           margin: EdgeInsets.only(right: 86.h),
                           child: Text(
-                              "E-Ticketing System for\n Traffic Violations",
+                              "E-Ticketing System for Traffic Violations",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,

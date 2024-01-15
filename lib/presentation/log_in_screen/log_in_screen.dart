@@ -9,9 +9,14 @@ import 'package:flutter/material.dart';
 import '../../widgets/toast_widget.dart';
 
 // ignore_for_file: must_be_immutable
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   LogInScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
   TextEditingController userNameController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -106,6 +111,8 @@ class LogInScreen extends StatelessWidget {
     ]);
   }
 
+  bool show = true;
+
   /// Section Widget
   Widget _buildPasswordColumn(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -119,9 +126,16 @@ class LogInScreen extends StatelessWidget {
       Padding(
           padding: EdgeInsets.only(left: 10.h),
           child: CustomTextFormField(
+              suffix: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      show = !show;
+                    });
+                  },
+                  icon: Icon(show ? Icons.visibility : Icons.visibility_off)),
               controller: passwordController,
               textInputAction: TextInputAction.done,
-              obscureText: true))
+              obscureText: show))
     ]);
   }
 

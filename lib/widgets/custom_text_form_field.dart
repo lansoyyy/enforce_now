@@ -2,30 +2,31 @@ import 'package:enforcenow/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({
-    Key? key,
-    this.alignment,
-    this.width,
-    this.controller,
-    this.focusNode,
-    this.autofocus = true,
-    this.textStyle,
-    this.obscureText = false,
-    this.textInputAction = TextInputAction.next,
-    this.textInputType = TextInputType.text,
-    this.maxLines,
-    this.hintText,
-    this.hintStyle,
-    this.prefix,
-    this.prefixConstraints,
-    this.suffix,
-    this.suffixConstraints,
-    this.contentPadding,
-    this.borderDecoration,
-    this.fillColor,
-    this.filled = true,
-    this.validator,
-  }) : super(
+  CustomTextFormField(
+      {Key? key,
+      this.alignment,
+      this.width,
+      this.controller,
+      this.focusNode,
+      this.autofocus = true,
+      this.textStyle,
+      this.obscureText = false,
+      this.textInputAction = TextInputAction.next,
+      this.textInputType = TextInputType.text,
+      this.maxLines,
+      this.hintText,
+      this.hintStyle,
+      this.prefix,
+      this.prefixConstraints,
+      this.suffix,
+      this.suffixConstraints,
+      this.contentPadding,
+      this.borderDecoration,
+      this.fillColor,
+      this.filled = true,
+      this.validator,
+      this.enabled = true})
+      : super(
           key: key,
         );
 
@@ -38,6 +39,8 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
 
   final bool? autofocus;
+
+  final bool? enabled;
 
   final TextStyle? textStyle;
 
@@ -84,6 +87,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget get textFormFieldWidget => SizedBox(
         width: width ?? double.maxFinite,
         child: TextFormField(
+          enabled: enabled,
           controller: controller,
           focusNode: focusNode ?? FocusNode(),
           autofocus: autofocus!,
