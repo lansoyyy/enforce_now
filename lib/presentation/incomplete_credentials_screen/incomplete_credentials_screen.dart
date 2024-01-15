@@ -1,14 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
+import 'package:enforcenow/presentation/incomplete_credentials_screen/incomplete_crednetials_screen2.dart';
 import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:enforcenow/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
-class IncompleteCredentialsScreen extends StatelessWidget {
+class IncompleteCredentialsScreen extends StatefulWidget {
   IncompleteCredentialsScreen({Key? key})
       : super(
           key: key,
         );
 
+  @override
+  State<IncompleteCredentialsScreen> createState() =>
+      _IncompleteCredentialsScreenState();
+}
+
+class _IncompleteCredentialsScreenState
+    extends State<IncompleteCredentialsScreen> {
   TextEditingController surnameController = TextEditingController();
 
   TextEditingController editTextController = TextEditingController();
@@ -18,6 +28,8 @@ class IncompleteCredentialsScreen extends StatelessWidget {
   TextEditingController editTextController1 = TextEditingController();
 
   TextEditingController editTextController2 = TextEditingController();
+
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class IncompleteCredentialsScreen extends StatelessWidget {
                         style: theme.textTheme.headlineLarge,
                       ),
                       TextSpan(
-                        text: "Incomplete Credentials",
+                        text: "${box.read('type')} Credentials",
                         style: CustomTextStyles.headlineLargeBlueA200,
                       ),
                     ],
@@ -58,11 +70,89 @@ class IncompleteCredentialsScreen extends StatelessWidget {
               SizedBox(height: 15.v),
               _buildViolatorMiddleName(context),
               SizedBox(height: 15.v),
-              _buildViolatorAddress(context),
+              box.read('type') == 'Complete'
+                  ? SizedBox()
+                  : _buildViolatorAddress(context),
               SizedBox(height: 10.v),
-              _buildBirthdate(context),
+              box.read('type') == 'Complete'
+                  ? SizedBox()
+                  : _buildBirthdate(context),
+              box.read('type') == 'Complete'
+                  ? _buildViolatorAddress(context)
+                  : SizedBox(),
               SizedBox(height: 50.v),
               CustomElevatedButton(
+                onPressed: () async {
+                  int tots = 0;
+
+                  await FirebaseFirestore.instance
+                      .collection('Records')
+                      .where('fname', isEqualTo: editTextController.text)
+                      .get()
+                      .then((QuerySnapshot querySnapshot) {
+                    setState(() {
+                      tots = querySnapshot.docs.length;
+                    });
+                  });
+                  if (tots != 0) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Records Available'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Close'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                box.write('license', editTextController.text);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.violationHisotoryScreen);
+                              },
+                              child: Text('Continue'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('No Records'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Close'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        IncompleteCredentialsScreen2(
+                                          license: editTextController1.text,
+                                          address: editTextController1.text,
+                                          bday: editTextController2.text,
+                                          fname: editTextController.text,
+                                          lname: surnameController.text,
+                                          mname: nameController.text,
+                                        )));
+                              },
+                              child: Text('Add Record'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
                 text: "Next",
               ),
               SizedBox(height: 5.v),
@@ -159,7 +249,7 @@ class IncompleteCredentialsScreen extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(left: 11.h),
             child: Text(
-              "Violator’s Address",
+              box.read('type') == 'Complete' ? "License" : 'Address',
               style: CustomTextStyles.bodyMediumInterBlack90002,
             ),
           ),
