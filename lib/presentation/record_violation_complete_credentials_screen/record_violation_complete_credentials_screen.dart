@@ -5,6 +5,7 @@ import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:enforcenow/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 // ignore_for_file: must_be_immutable
 class RecordViolationCompleteCredentialsScreen extends StatefulWidget {
@@ -329,23 +330,69 @@ class _RecordViolationCompleteCredentialsScreenState
   }
 
   /// Section Widget
+  var dateController = TextEditingController();
+
+  /// Section Widget
+  void dateFromPicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+                onSurface: Colors.grey,
+              ),
+            ),
+            child: child!,
+          );
+        },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2050));
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+      setState(() {
+        dateController.text = formattedDate;
+      });
+    } else {
+      return null;
+    }
+  }
+
+  /// Section Widget
   Widget buildbday(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(right: 7.h),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return GestureDetector(
+      onTap: () {
+        dateFromPicker(context);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Opacity(
-              opacity: 0.7,
-              child: Padding(
-                  padding: EdgeInsets.only(left: 18.h),
-                  child: Text("Birthdate",
-                      style: CustomTextStyles.bodyMediumInterBlack90002))),
-          SizedBox(height: 1.v),
+            opacity: 0.7,
+            child: Padding(
+              padding: EdgeInsets.only(left: 13.h),
+              child: Text(
+                "Birthdate",
+                style: CustomTextStyles.bodyMediumInterBlack90002,
+              ),
+            ),
+          ),
           Padding(
-              padding: EdgeInsets.only(left: 18.h),
-              child: CustomTextFormField(
-                  controller: bdayTextController,
-                  alignment: Alignment.centerRight))
-        ]));
+            padding: EdgeInsets.only(left: 10.h),
+            child: CustomTextFormField(
+              enabled: false,
+              controller: dateController,
+              textInputAction: TextInputAction.done,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget suffix(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:enforcenow/widgets/custom_elevated_button.dart';
 import 'package:enforcenow/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class IncompleteCredentialsScreen2 extends StatefulWidget {
   String lname;
@@ -388,28 +389,68 @@ class _IncompleteCredentialsScreen2State
   }
 
   /// Section Widget
+  var dateController = TextEditingController();
+
+  /// Section Widget
+  void dateFromPicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+                onSurface: Colors.grey,
+              ),
+            ),
+            child: child!,
+          );
+        },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2050));
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+      setState(() {
+        dateController.text = formattedDate;
+      });
+    } else {
+      return null;
+    }
+  }
+
+  /// Section Widget
   Widget _buildBirthdate(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Opacity(
-          opacity: 0.7,
-          child: Padding(
-            padding: EdgeInsets.only(left: 13.h),
-            child: Text(
-              "Birthdate",
-              style: CustomTextStyles.bodyMediumInterBlack90002,
+    return GestureDetector(
+      onTap: () {
+        dateFromPicker(context);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Opacity(
+            opacity: 0.7,
+            child: Padding(
+              padding: EdgeInsets.only(left: 13.h),
+              child: Text(
+                "Birthdate",
+                style: CustomTextStyles.bodyMediumInterBlack90002,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 10.h),
-          child: CustomTextFormField(
-            controller: editTextController2,
-            textInputAction: TextInputAction.done,
+          Padding(
+            padding: EdgeInsets.only(left: 10.h),
+            child: CustomTextFormField(
+              enabled: false,
+              controller: dateController,
+              textInputAction: TextInputAction.done,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

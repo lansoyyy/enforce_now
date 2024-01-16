@@ -15,13 +15,13 @@ class SplashScreen extends StatelessWidget {
                 child: Column(children: [
                   SizedBox(
                       height: 250.v,
-                      width: 232.h,
+                      width: 250.h,
                       child:
                           Stack(alignment: Alignment.bottomCenter, children: [
                         CustomImageView(
                             imagePath: ImageConstant.imgSingleLogo2,
-                            height: 175.v,
-                            width: 130.h,
+                            height: 175,
+                            width: 175,
                             alignment: Alignment.topCenter),
                         Align(
                             alignment: Alignment.bottomCenter,
