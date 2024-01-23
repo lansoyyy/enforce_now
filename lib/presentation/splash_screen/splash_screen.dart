@@ -14,20 +14,19 @@ class SplashScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 16.h, top: 165.v, right: 16.h),
                 child: Column(children: [
                   SizedBox(
-                      height: 250.v,
-                      width: 250.h,
-                      child:
-                          Stack(alignment: Alignment.bottomCenter, children: [
-                        CustomImageView(
-                            imagePath: ImageConstant.imgSingleLogo2,
-                            height: 175,
-                            width: 175,
-                            alignment: Alignment.topCenter),
-                        Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("EnforceNow",
-                                style: theme.textTheme.displayMedium))
-                      ])),
+                      child: Column(children: [
+                    Image.asset(
+                      ImageConstant.imgSingleLogo2,
+                      height: 200,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text("EnforceNow",
+                            style: theme.textTheme.displayMedium))
+                  ])),
                   Align(
                       alignment: Alignment.centerRight,
                       child: Container(

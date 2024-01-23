@@ -54,23 +54,24 @@ class _LogInScreenState extends State<LogInScreen> {
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                          height: 47.v,
+                          height: 75.v,
                           width: 142.h,
                           margin: EdgeInsets.only(left: 10.h),
-                          child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text("Login",
-                                        style: CustomTextStyles
-                                            .headlineLargeBlueA200_1)),
-                                Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Text("Please login to continue.",
-                                        style: CustomTextStyles
-                                            .bodyMediumAsapGray800))
-                              ]))),
+                          child: Column(children: [
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text("Login",
+                                    style: CustomTextStyles
+                                        .headlineLargeBlueA200_1)),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text("Please login to continue.",
+                                    style:
+                                        CustomTextStyles.bodyMediumAsapGray800))
+                          ]))),
                   SizedBox(height: 13.v),
                   _buildUserNameColumn(context),
                   SizedBox(height: 12.v),

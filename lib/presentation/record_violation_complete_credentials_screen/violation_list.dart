@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow/core/app_export.dart';
 import 'package:enforcenow/presentation/record_violation_complete_credentials_screen/ticket_page.dart';
 import 'package:enforcenow/widgets/custom_elevated_button.dart';
@@ -131,46 +132,55 @@ class _ViolationListState extends State<ViolationList> {
                 child: SingleChildScrollView(
                   child: Column(children: [
                     _buildArrowLeftSection(context),
-                    SizedBox(
-                      height: 300,
-                      width: 500,
-                      child: ListView.builder(
-                        itemCount: violations.length ~/ 2,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Expanded(
-                                child: CheckboxListTile(
-                                  title:
-                                      Text(violations[index * 2]['violation']),
-                                  value: selectedViolations[index * 2],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedViolations[index * 2] = value!;
-                                      updateSelectedItems();
-                                    });
-                                  },
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Violations')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
                                 ),
                               ),
-                              Expanded(
-                                child: CheckboxListTile(
-                                  title: Text(
-                                      violations[index * 2 + 1]['violation']),
-                                  value: selectedViolations[index * 2 + 1],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedViolations[index * 2 + 1] =
-                                          value!;
-                                      updateSelectedItems();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
+                            );
+                          }
+
+                          final data = snapshot.requireData;
+                          return SizedBox(
+                            height: 300,
+                            width: 500,
+                            child: ListView.builder(
+                              itemCount: data.docs.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: CheckboxListTile(
+                                        title: Text(data.docs[index]['name']),
+                                        value: selectedViolations[index],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedViolations[index] = value!;
+                                            updateSelectedItems();
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           );
-                        },
-                      ),
-                    ),
+                        }),
                     SizedBox(
                       height: 10,
                     ),
