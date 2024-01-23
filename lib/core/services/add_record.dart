@@ -26,7 +26,9 @@ Future addRecord(lname, fname, mname, license, type, bday, platenumber, model,
     'ownername': ownername,
     'owneraddress': owneraddress,
     'img': img,
-    'desc': desc
+    'desc': desc,
+    'day': DateTime.now().day,
+    'month': DateTime.now().month,
   };
 
   await docUser.set(json);
