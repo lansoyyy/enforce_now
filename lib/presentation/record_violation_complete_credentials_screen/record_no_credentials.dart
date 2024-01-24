@@ -366,7 +366,7 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now());
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);

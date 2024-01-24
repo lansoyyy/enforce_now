@@ -111,6 +111,11 @@ class _IncompleteCredentialsScreenState
                             TextButton(
                               onPressed: () {
                                 box.write('license', editTextController.text);
+                                box.write(
+                                    'name',
+                                    fnameController.text +
+                                        ' ' +
+                                        surnameController.text);
                                 Navigator.pushNamed(
                                     context, AppRoutes.violationHisotoryScreen);
                               },
@@ -190,6 +195,8 @@ class _IncompleteCredentialsScreenState
     );
   }
 
+  final fnameController = TextEditingController();
+
   /// Section Widget
   Widget _buildViolatorFirstName(BuildContext context) {
     return Column(
@@ -208,7 +215,7 @@ class _IncompleteCredentialsScreenState
         Padding(
           padding: EdgeInsets.only(left: 10.h),
           child: CustomTextFormField(
-            controller: editTextController,
+            controller: fnameController,
           ),
         ),
       ],
@@ -284,7 +291,7 @@ class _IncompleteCredentialsScreenState
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now());
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
