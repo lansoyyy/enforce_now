@@ -50,6 +50,6 @@ class SplashScreen extends StatelessWidget {
 
   /// Navigates to the logInScreen when the action is triggered.
   onTapLetsGetStarted(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.logInScreen);
+    Navigator.pushReplacementNamed(context, AppRoutes.logInScreen);
   }
 }
