@@ -210,81 +210,96 @@ class _ViolationListState extends State<ViolationList> {
                         CustomElevatedButton(
                             width: 150,
                             onPressed: () {
-                              try {
-                                final id = addRecord(
-                                        widget.lname,
-                                        widget.fname,
-                                        '',
-                                        widget.license,
-                                        box.read('type'),
-                                        widget.bday,
-                                        widget.plate,
-                                        widget.model,
-                                        widget.classification,
-                                        widget.address,
-                                        widget.place,
-                                        widget.ownername,
-                                        widget.owneraddress,
-                                        imageURL,
-                                        othersController.text)
-                                    .then((value) {
-                                  showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Record Saved!'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pushReplacementNamed(
-                                                  context,
-                                                  AppRoutes.mainMenuScreen);
-                                            },
-                                            child: Text(
-                                              'Home',
+                              if (widget.lname != '' ||
+                                  widget.fname != '' ||
+                                  widget.license != '' ||
+                                  widget.bday != '' ||
+                                  widget.plate != '' ||
+                                  widget.model != '' ||
+                                  widget.classification != '' ||
+                                  widget.address != '' ||
+                                  widget.place != '' ||
+                                  widget.ownername != '' ||
+                                  widget.owneraddress != '') {
+                                try {
+                                  final id = addRecord(
+                                          widget.lname,
+                                          widget.fname,
+                                          '',
+                                          widget.license,
+                                          box.read('type'),
+                                          widget.bday,
+                                          widget.plate,
+                                          widget.model,
+                                          widget.classification,
+                                          widget.address,
+                                          widget.place,
+                                          widget.ownername,
+                                          widget.owneraddress,
+                                          imageURL,
+                                          othersController.text)
+                                      .then((value) {
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Record Saved!'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pushReplacementNamed(
+                                                    context,
+                                                    AppRoutes.mainMenuScreen);
+                                              },
+                                              child: Text(
+                                                'Home',
+                                              ),
                                             ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) => TicketPage(
-                                                          id: value,
-                                                          others:
-                                                              othersController
-                                                                  .text,
-                                                          violations:
-                                                              selectedItems,
-                                                          fname: widget.fname,
-                                                          lname: widget.lname,
-                                                          bday: widget.bday,
-                                                          license:
-                                                              widget.license,
-                                                          plate: widget.plate,
-                                                          model: widget.model,
-                                                          classification: widget
-                                                              .classification,
-                                                          address:
-                                                              widget.address,
-                                                          place: widget.place,
-                                                          ownername:
-                                                              widget.ownername,
-                                                          owneraddress: widget
-                                                              .owneraddress)));
-                                            },
-                                            child: Text(
-                                              'Issue E-Ticket',
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) => TicketPage(
+                                                            id: value,
+                                                            others:
+                                                                othersController
+                                                                    .text,
+                                                            violations:
+                                                                selectedItems,
+                                                            fname: widget.fname,
+                                                            lname: widget.lname,
+                                                            bday: widget.bday,
+                                                            license:
+                                                                widget.license,
+                                                            plate: widget.plate,
+                                                            model: widget.model,
+                                                            classification: widget
+                                                                .classification,
+                                                            address:
+                                                                widget.address,
+                                                            place: widget.place,
+                                                            ownername: widget
+                                                                .ownername,
+                                                            owneraddress: widget
+                                                                .owneraddress)));
+                                              },
+                                              child: Text(
+                                                'Issue E-Ticket',
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  showToast('Record added succesfully!');
-                                });
-                              } catch (e) {
-                                showToast(e.toString());
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    showToast('Record added succesfully!');
+                                  });
+                                } catch (e) {
+                                  showToast(e.toString());
+                                }
+                              } else {
+                                showToast(
+                                    'Cannot proceed! Please input blank fields');
                               }
                             },
                             text: "Save",

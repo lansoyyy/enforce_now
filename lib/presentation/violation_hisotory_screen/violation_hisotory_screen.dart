@@ -26,7 +26,7 @@ class ViolationHisotoryScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Violation Historys",
+                  "Violation History",
                   style: theme.textTheme.headlineLarge,
                 ),
               ),
@@ -232,9 +232,14 @@ class ViolationHisotoryScreen extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: 20.h),
-            child: Text(
-              "Show",
-              style: CustomTextStyles.bodyMediumInterErrorContainer,
+            child: GestureDetector(
+              onTap: () {
+                showdeticket(context, data);
+              },
+              child: Text(
+                "Show",
+                style: CustomTextStyles.bodyMediumInterErrorContainer,
+              ),
             ),
           ),
           Padding(
@@ -246,6 +251,149 @@ class ViolationHisotoryScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  showdeticket(context, data) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 16.v),
+                child: SingleChildScrollView(
+                    child: Column(children: [
+                  Image.asset(
+                    'assets/images/img_single_logo_2.png',
+                    height: 50,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Enforce Now'),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(DateFormat('MMMM, dd, yyyy hh:mm a')
+                      .format(data['dateTime'].toDate())),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Divider(),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(DateFormat('TVR').format(DateTime.now())),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(DateFormat(data.id).format(DateTime.now())),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Issued at:'),
+                          Text('Cagayan De Oro City',
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Violator's Name"),
+                          Text(data['ownername'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("License"),
+                          Text(data['license'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Address"),
+                          Text(data['owneraddress'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Plate Number"),
+                          Text(data['platenumber'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Type of Vehicle"),
+                          Text(data['model'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Body Color"),
+                          Text(data['classification'],
+                              style:
+                                  CustomTextStyles.bodySmallBebasNeueBlue700),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(height: 5.v)
+                    ]),
+                  )
+                ]))));
+      },
     );
   }
 }
