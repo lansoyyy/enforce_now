@@ -86,15 +86,28 @@ class _IncompleteCredentialsScreenState
                 onPressed: () async {
                   int tots = 0;
 
-                  await FirebaseFirestore.instance
-                      .collection('Records')
-                      .where('fname', isEqualTo: editTextController.text)
-                      .get()
-                      .then((QuerySnapshot querySnapshot) {
-                    setState(() {
-                      tots = querySnapshot.docs.length;
+                  if (box.read('type') == 'Complete') {
+                    await FirebaseFirestore.instance
+                        .collection('Records')
+                        .where('license', isEqualTo: editTextController1.text)
+                        .get()
+                        .then((QuerySnapshot querySnapshot) {
+                      setState(() {
+                        tots = querySnapshot.docs.length;
+                      });
                     });
-                  });
+                  } else {
+                    await FirebaseFirestore.instance
+                        .collection('Records')
+                        .where('lname', isEqualTo: surnameController.text)
+                        .get()
+                        .then((QuerySnapshot querySnapshot) {
+                      setState(() {
+                        tots = querySnapshot.docs.length;
+                      });
+                    });
+                  }
+
                   if (tots != 0) {
                     showDialog(
                       context: context,
@@ -140,13 +153,14 @@ class _IncompleteCredentialsScreenState
                             ),
                             TextButton(
                               onPressed: () {
+                                print(fnameController.text);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         IncompleteCredentialsScreen2(
                                           license: editTextController1.text,
                                           address: editTextController1.text,
                                           bday: editTextController2.text,
-                                          fname: editTextController.text,
+                                          fname: fnameController.text,
                                           lname: surnameController.text,
                                           mname: nameController.text,
                                         )));

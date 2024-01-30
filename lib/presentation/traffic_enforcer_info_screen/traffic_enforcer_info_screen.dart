@@ -63,14 +63,13 @@ class TrafficEnforcerInfoScreen extends StatelessWidget {
                                       margin: EdgeInsets.only(left: 16.h))),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 50),
+                              padding: const EdgeInsets.only(top: 40),
                               child: Center(
-                                child: Icon(
-                                  Icons.account_circle,
-                                  color: Colors.white,
-                                  size: 75,
-                                ),
-                              ),
+                                  child: CircleAvatar(
+                                minRadius: 45,
+                                maxRadius: 45,
+                                backgroundImage: NetworkImage(data['profile']),
+                              )),
                             ),
                           ],
                         ),
