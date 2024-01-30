@@ -4,15 +4,25 @@ import 'package:enforcenow/presentation/incomplete_credentials_screen/incomplete
 import 'package:enforcenow/presentation/record_violation_complete_credentials_screen/record_no_credentials.dart';
 import 'package:enforcenow/widgets/custom_icon_button.dart';
 import 'package:enforcenow/widgets/custom_search_view.dart';
+import 'package:enforcenow/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../record_hisotry_screen/widgets/topup_item_widget.dart';
+
 // ignore_for_file: must_be_immutable
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends StatefulWidget {
   MainMenuScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
   TextEditingController searchController = TextEditingController();
+
+  String license = '';
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +166,116 @@ class MainMenuScreen extends StatelessWidget {
                     SizedBox(height: 27.v),
                     Padding(
                         padding: EdgeInsets.only(left: 3.h),
-                        child: Row(children: [
-                          Expanded(
-                              child: CustomSearchView(
-                                  controller: searchController,
-                                  hintText: "Search ")),
-                          Padding(
-                              padding: EdgeInsets.only(left: 16.h),
-                              child: CustomIconButton(
-                                  height: 40.adaptSize,
-                                  width: 40.adaptSize,
-                                  padding: EdgeInsets.all(12.h),
-                                  decoration: IconButtonStyleHelper
-                                      .fillOnPrimaryContainer,
-                                  child: CustomImageView(
-                                      imagePath: ImageConstant.imgSearchIcon)))
-                        ]))
+                        child: GestureDetector(
+                          child: Row(children: [
+                            Expanded(
+                                child: CustomSearchView(
+                                    onChanged: (p0) {
+                                      setState(() {
+                                        license = p0;
+                                      });
+                                    },
+                                    controller: searchController,
+                                    hintText: "Search ")),
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Records')
+                                    .where('license', isEqualTo: license)
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error);
+                                    return const Center(child: Text('Error'));
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(top: 50),
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      )),
+                                    );
+                                  }
+
+                                  final data = snapshot.requireData;
+                                  return Padding(
+                                      padding: EdgeInsets.only(left: 16.h),
+                                      child: CustomIconButton(
+                                          onTap: () {
+                                            if (data.docs.isNotEmpty) {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text('Search result'),
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.close,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    content: SizedBox(
+                                                      height: 250,
+                                                      width: 500,
+                                                      child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  right: 12.h),
+                                                          child: ListView
+                                                              .separated(
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  separatorBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return SizedBox(
+                                                                        height:
+                                                                            8.v);
+                                                                  },
+                                                                  itemCount: data
+                                                                      .docs
+                                                                      .length,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return TopupItemWidget(
+                                                                      data: data
+                                                                              .docs[
+                                                                          index],
+                                                                    );
+                                                                  })),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            } else {
+                                              showToast('No result found!');
+                                            }
+                                          },
+                                          height: 40.adaptSize,
+                                          width: 40.adaptSize,
+                                          padding: EdgeInsets.all(12.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillOnPrimaryContainer,
+                                          child: CustomImageView(
+                                              imagePath: ImageConstant
+                                                  .imgSearchIcon)));
+                                })
+                          ]),
+                        ))
                   ]));
         });
   }
