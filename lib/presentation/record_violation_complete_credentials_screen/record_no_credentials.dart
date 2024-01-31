@@ -251,6 +251,7 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
                                 });
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ViolationList(
+                                        img: imageURLs[0],
                                         lname:
                                             ' ${surnameController.text} ${suffixTextController.text}',
                                         fname: '${firstNameController.text}',
