@@ -202,40 +202,7 @@ class _IncompleteCredentialsScreen2State
                 ),
                 SizedBox(height: 26.v),
                 SizedBox(height: 9.v),
-                box.read('type') == 'Complete'
-                    ? platenumber(context)
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            child: Padding(
-                                padding: EdgeInsets.only(right: 7.h),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Opacity(
-                                          opacity: 0.7,
-                                          child: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 22.h),
-                                              child: Text("License No.",
-                                                  style: CustomTextStyles
-                                                      .bodyMediumInterBlack90002))),
-                                      SizedBox(height: 1.v),
-                                      Padding(
-                                          padding: EdgeInsets.only(left: 18.h),
-                                          child: CustomTextFormField(
-                                              controller: editTextController,
-                                              textInputAction:
-                                                  TextInputAction.done,
-                                              alignment: Alignment.centerRight))
-                                    ])),
-                          ),
-                          SizedBox(width: 150, child: platenumber(context)),
-                        ],
-                      ),
+                platenumber(context),
                 SizedBox(height: 9.v),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
