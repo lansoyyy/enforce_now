@@ -10,6 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io';
 import '../../widgets/custom_text_form_field.dart';
+import 'package:printing/printing.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 // ignore_for_file: must_be_immutable
 class TicketPage extends StatefulWidget {
@@ -65,6 +68,25 @@ class _TicketPageState extends State<TicketPage> {
   late File imageFile;
 
   late String imageURL = '';
+
+  final doc = pw.Document();
+
+  printing(Uint8List capturedImage) async {
+    doc.addPage(pw.Page(
+      build: (pw.Context context) {
+        return pw.Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: pw.Image(
+              pw.MemoryImage(capturedImage),
+            ));
+      },
+    ));
+
+    await Printing.layoutPdf(onLayout: (format) async => doc.save());
+  }
+
+  final ssController = ScreenshotController();
 
   Future<void> uploadPicture(String inputSource) async {
     final picker = ImagePicker();
@@ -139,171 +161,187 @@ class _TicketPageState extends State<TicketPage> {
                 child: SingleChildScrollView(
                   child: Column(children: [
                     _buildArrowLeftSection(context),
-                    Image.asset(
-                      'assets/images/img_single_logo_2.png',
-                      height: 50,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text('Enforce Now'),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(DateFormat('MMMM, dd, yyyy hh:mm a')
-                        .format(DateTime.now())),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Divider(),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(DateFormat('TVR').format(DateTime.now())),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(DateFormat(widget.id).format(DateTime.now())),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                    Screenshot(
+                      controller: ssController,
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Issued at:'),
-                              Text('Cagayan De Oro City',
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Violator's Name"),
-                              Text(widget.ownername,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("License"),
-                              Text(widget.license,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Address"),
-                              Text(widget.owneraddress,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Plate Number"),
-                              Text(widget.plate,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Type of Vehicle"),
-                              Text(widget.model,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Body Color"),
-                              Text(widget.classification,
-                                  style: CustomTextStyles
-                                      .bodySmallBebasNeueBlue700),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Amount to be paid"),
-                              Text(
-                                  '${widget.violations.fold(0, (acc, violation) => int.parse(acc.toString()) + int.parse(violation["fine"].toString()))}',
-                                  style:
-                                      CustomTextStyles.headlineLargeBlueA200),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
+                          Image.asset(
+                            'assets/images/img_single_logo_2.png',
                             height: 50,
-                            child: ListView.builder(
-                              itemCount: widget.violations.length,
-                              itemBuilder: (context, index) {
-                                return Row(
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text('Enforce Now'),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(DateFormat('MMMM, dd, yyyy hh:mm a')
+                              .format(DateTime.now())),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Divider(),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(DateFormat('TVR').format(DateTime.now())),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(DateFormat(widget.id).format(DateTime.now())),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Column(
+                              children: [
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(widget.violations[index]['violation'] +
-                                        ':'),
-                                    Text(
-                                        widget.violations[index]['fine']
-                                            .toString(),
+                                    Text('Issued at:'),
+                                    Text('Cagayan De Oro City',
                                         style: CustomTextStyles
-                                            .bodySmallBebasNeueBlue700)
+                                            .bodySmallBebasNeueBlue700),
                                   ],
-                                );
-                              },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Violator's Name"),
+                                    Text(widget.ownername,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("License"),
+                                    Text(widget.license,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Address"),
+                                    Text(widget.owneraddress,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Plate Number"),
+                                    Text(widget.plate,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Type of Vehicle"),
+                                    Text(widget.model,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Body Color"),
+                                    Text(widget.classification,
+                                        style: CustomTextStyles
+                                            .bodySmallBebasNeueBlue700),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Amount to be paid"),
+                                    Text(
+                                        '${widget.violations.fold(0, (acc, violation) => int.parse(acc.toString()) + int.parse(violation["fine"].toString()))}',
+                                        style: CustomTextStyles
+                                            .headlineLargeBlueA200),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  child: ListView.builder(
+                                    itemCount: widget.violations.length,
+                                    itemBuilder: (context, index) {
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(widget.violations[index]
+                                                  ['violation'] +
+                                              ':'),
+                                          Text(
+                                              widget.violations[index]['fine']
+                                                  .toString(),
+                                              style: CustomTextStyles
+                                                  .bodySmallBebasNeueBlue700)
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -334,7 +372,16 @@ class _TicketPageState extends State<TicketPage> {
                         ),
                         CustomElevatedButton(
                             width: 150,
-                            onPressed: () {},
+                            onPressed: () {
+                              ssController
+                                  .capture(
+                                      delay: const Duration(milliseconds: 10))
+                                  .then((capturedImage) async {
+                                printing(capturedImage!);
+                              }).catchError((onError) {
+                                print(onError);
+                              });
+                            },
                             text: "Print",
                             margin: EdgeInsets.symmetric(horizontal: 7.h)),
                       ],
