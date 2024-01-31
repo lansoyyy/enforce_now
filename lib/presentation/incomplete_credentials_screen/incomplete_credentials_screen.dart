@@ -123,7 +123,7 @@ class _IncompleteCredentialsScreenState
                             ),
                             TextButton(
                               onPressed: () {
-                                box.write('license', editTextController.text);
+                                box.write('license', editTextController1.text);
                                 box.write(
                                     'name',
                                     fnameController.text +
@@ -153,6 +153,7 @@ class _IncompleteCredentialsScreenState
                             ),
                             TextButton(
                               onPressed: () {
+                                box.write('license', editTextController1.text);
                                 print(fnameController.text);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>

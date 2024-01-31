@@ -210,6 +210,9 @@ class _RecordViolationCompleteCredentialsScreenState
                                           ),
                                           TextButton(
                                             onPressed: () {
+                                              box.write('license',
+                                                  editTextController.text);
+
                                               Navigator.of(context).push(MaterialPageRoute(
                                                   builder: (context) => ViolationList(
                                                       lname:

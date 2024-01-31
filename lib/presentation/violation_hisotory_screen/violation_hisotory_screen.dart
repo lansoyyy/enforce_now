@@ -12,6 +12,7 @@ class ViolationHisotoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(box.read('license'));
     return SafeArea(
       child: Scaffold(
         body: Container(
