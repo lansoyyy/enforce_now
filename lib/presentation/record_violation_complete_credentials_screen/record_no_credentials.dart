@@ -212,7 +212,30 @@ class _RecordNoCredentialsState extends State<RecordNoCredentials> {
                                     child: Row(
                                       children: [
                                         IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: SizedBox(
+                                                    height: 300,
+                                                    width: 300,
+                                                    child: Image.network(
+                                                        imageURLs[index],
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Close'))
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
                                           icon: Icon(Icons.visibility),
                                         ),
                                         IconButton(
