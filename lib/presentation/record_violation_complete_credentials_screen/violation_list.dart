@@ -27,6 +27,7 @@ class ViolationList extends StatefulWidget {
   String ownername;
   String owneraddress;
   String? img;
+  String? desc;
 
   ViolationList(
       {required this.fname,
@@ -39,6 +40,7 @@ class ViolationList extends StatefulWidget {
       required this.address,
       required this.place,
       this.img = '',
+      this.desc = '',
       required this.ownername,
       required this.owneraddress});
   @override
@@ -241,7 +243,9 @@ class _ViolationListState extends State<ViolationList> {
                                           widget.img == ''
                                               ? imageURL
                                               : widget.img,
-                                          othersController.text)
+                                          widget.desc == ''
+                                              ? othersController.text
+                                              : widget.desc)
                                       .then((value) {
                                     showDialog(
                                       barrierDismissible: false,
