@@ -1,8 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future addRecord(lname, fname, mname, license, type, bday, platenumber, model,
-    classification, address, place, ownername, owneraddress, img, desc) async {
+Future addRecord(
+    lname,
+    fname,
+    mname,
+    license,
+    type,
+    bday,
+    platenumber,
+    model,
+    classification,
+    address,
+    place,
+    ownername,
+    owneraddress,
+    img,
+    desc,
+    payment) async {
   final docUser = FirebaseFirestore.instance.collection('Records').doc();
 
   final json = {
@@ -16,7 +31,7 @@ Future addRecord(lname, fname, mname, license, type, bday, platenumber, model,
     'type': type,
     'dateTime': DateTime.now(),
     'isPaid': false,
-    'payment': 0,
+    'payment': payment,
     'bday': bday,
     'platenumber': platenumber,
     'model': model,

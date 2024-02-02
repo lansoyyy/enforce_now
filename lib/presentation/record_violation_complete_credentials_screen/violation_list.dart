@@ -245,7 +245,8 @@ class _ViolationListState extends State<ViolationList> {
                                               : widget.img,
                                           widget.desc == ''
                                               ? othersController.text
-                                              : widget.desc)
+                                              : widget.desc,
+                                          '${selectedItems.fold(0, (acc, violation) => int.parse(acc.toString()) + int.parse(violation["fine"].toString()))}')
                                       .then((value) {
                                     showDialog(
                                       barrierDismissible: false,
