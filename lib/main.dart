@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,13 +27,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          theme: theme,
-          title: 'enforcenow',
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.splashScreen,
-          routes: AppRoutes.routes,
-        );
+        return StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              return MaterialApp(
+                theme: theme,
+                title: 'enforcenow',
+                debugShowCheckedModeBanner: false,
+                initialRoute: snapshot.hasData
+                    ? AppRoutes.mainMenuScreen
+                    : AppRoutes.splashScreen,
+                routes: AppRoutes.routes,
+              );
+            });
       },
     );
   }

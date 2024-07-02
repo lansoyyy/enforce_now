@@ -8,7 +8,7 @@ import 'package:enforcenow/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../record_hisotry_screen/widgets/topup_item_widget.dart';
 
 // ignore_for_file: must_be_immutable
@@ -180,7 +180,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('Records')
-                                    .where('license', isEqualTo: license)
+                                    .where('fname',
+                                        isGreaterThanOrEqualTo:
+                                            toBeginningOfSentenceCase(license))
+                                    .where('fname',
+                                        isLessThan:
+                                            '${toBeginningOfSentenceCase(license)}z')
                                     .snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -445,8 +450,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         builder: (context) => AlertDialog(
               title: const Text(
                 'Logout Confirmation',
-                style:
-                    TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontFamily: 'QBold',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
               content: const Text(
                 'Are you sure you want to Logout?',

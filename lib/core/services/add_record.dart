@@ -44,6 +44,8 @@ Future addRecord(
     'desc': desc,
     'day': DateTime.now().day,
     'month': DateTime.now().month,
+    'refno': '',
+    'paymentType': '',
   };
 
   await docUser.set(json);
